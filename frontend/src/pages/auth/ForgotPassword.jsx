@@ -16,7 +16,6 @@ function ForgotPassword() {
 
     const onChangeType = (type) => {
         console.log(`Change to ${type} type`);
-        // Add your logic to change the type here
     };
 
     return (
