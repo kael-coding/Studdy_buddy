@@ -3,15 +3,11 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Loader } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query"
-import { toast } from "react-hot-toast";
-
+import { useAuthStore } from "../../store/authStore";
 
 import InputField from "../../components/auth/InputField";
 import PasswordStrengthMeter from "../../components/auth/PasswordStrengthMeter";
 
-
-const API_URL = "http://localhost:5000"
 
 function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -24,36 +20,9 @@ function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-
+    const { signup, isLoading, } = useAuthStore();
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const { mutate, error, isLoading } = useMutation({
-        mutationFn: async ({ email, userName, password }) => {
-            try {
-                const res = await fetch(`${API_URL}/api/auth/signup`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, userName, password }),
-                });
-
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || "Failed to create account");
-                console.log(data);
-                navigate("/verify-email", { state: { email: data.email } });
-                return data;
-            } catch (error) {
-                console.error(error);
-                throw error;
-            }
-        },
-        onSuccess: () => {
-            toast.success("Account created successfully");
-        },
-    });
-
-
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -62,12 +31,17 @@ function SignUpPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { email, userName, password, confirmPassword } = formData;
-        if (password !== confirmPassword) {
-            return setError("Passwords do not match");
+        try {
+            const { password, confirmPassword } = formData;
+            if (password !== confirmPassword) {
+                return setError("Passwords do not match");
+            } else {
+                await signup(formData.email, formData.userName, formData.password);
+                navigate("/verify-email");
+            }
+        } catch (error) {
+            throw error;
         }
-        mutate({ email, userName, password });
-
     };
 
     return (

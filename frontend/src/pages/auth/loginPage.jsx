@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Loader } from "lucide-react";
 import InputField from "../../components/auth/InputField";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
 
 function LoginPage() {
     const [formData, setFormData] = useState({
@@ -10,15 +11,20 @@ function LoginPage() {
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const { login, isLoading, error } = useAuthStore()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        try {
+            await login(formData.email, formData.password);
+        } catch (error) {
+            throw error;
+        }
     };
 
     return (
@@ -49,8 +55,9 @@ function LoginPage() {
                     <Link to="/forgot-password" className="block text-right text-sm text-blue-600 hover:underline cursor-pointer mt-3">
                         Forgot Password?
                     </Link>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
                     <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md mt-4 cursor-pointer">
-                        Login
+                        {isLoading ? <Loader className="w-6 h-6" /> : "Login"}
                     </button>
                 </form>
                 <p className="text-center text-sm mt-3">

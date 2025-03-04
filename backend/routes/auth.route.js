@@ -4,7 +4,7 @@ import { protectRoutes } from '../middleware/protectRoutes.js'
 
 const router = express()
 
-router.get("/getMe", protectRoutes, checkAuth)
+router.get("/check-auth", protectRoutes, checkAuth)
 router.post("/signup", signup)
 router.post("/login", login)
 router.post("/logout", logout)
