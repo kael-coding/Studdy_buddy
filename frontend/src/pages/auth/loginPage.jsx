@@ -1,0 +1,60 @@
+import { useState } from "react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import InputField from "../../components/auth/InputField";
+import { Link } from "react-router-dom";
+
+function LoginPage() {
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <InputField
+                        label="Email"
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        icon={<Mail size={20} />}
+                    />
+                    <InputField
+                        label="Password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        icon={<Lock size={20} />}
+                        toggleIcon={showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        onToggle={() => setShowPassword(!showPassword)}
+                    />
+                    <Link to="/forgot-password" className="block text-right text-sm text-blue-600 hover:underline cursor-pointer mt-3">
+                        Forgot Password?
+                    </Link>
+                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md mt-4 cursor-pointer">Login</button>
+                </form>
+                <p className="text-center text-sm mt-3">
+                    Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline cursor-pointer">Sign Up</Link>
+                </p>
+            </div>
+        </div>
+    );
+}
+
+export default LoginPage;

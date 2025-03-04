@@ -5,9 +5,9 @@ import { generateTokenAndSetCookie } from "../lib/utils/generateTokenandSetCooki
 import { sendPasswordResetResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../middleware/nodemailer/email.js";
 
 export const signup = async (req, res) => {
-    const { email, fullName, userName, password } = req.body;
+    const { email, userName, password } = req.body;
     try {
-        if (!email || !fullName || !userName || !password) {
+        if (!email || !userName || !password) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
