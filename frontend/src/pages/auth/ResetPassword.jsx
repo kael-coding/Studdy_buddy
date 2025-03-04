@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Eye, EyeOff, Lock } from "lucide-react";
-import InputField from "../../components/auth/InputField";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+import { Loader } from "lucide-react";
+import InputField from "../../components/auth/InputField";
 
 function ResetPassword() {
     const [password, setPassword] = useState("");
@@ -14,12 +16,22 @@ function ResetPassword() {
         if (name === "password") setPassword(value);
         if (name === "confirmPassword") setConfirmPassword(value);
     };
+    const { ResetPassword, isLoading } = useAuthStore()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        } else {
+            await ResetPassword(password, confirmPassword)
 
+        }
+    }
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-2xl shadow-lg w-96 w-[430px]">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Reset Password</h2>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                     <InputField
                         label="New Password"
                         type={showPassword ? "text" : "password"}
@@ -42,7 +54,7 @@ function ResetPassword() {
                         onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
                     />
                     <button className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition shadow-md mt-4">
-                        Reset Password
+                        {isLoading ? <Loader className="w-6 h-6" /> : "Reset Password"}
                     </button>
                 </form>
                 <p className="text-center text-sm mt-3">

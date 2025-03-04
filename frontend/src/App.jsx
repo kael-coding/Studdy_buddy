@@ -8,9 +8,11 @@ import ForgotPassword from './pages/auth/ForgotPassword.jsx'
 import ResetPassword from './pages/auth/ResetPassword.jsx'
 import VerificationCode from './pages/code/verifyCode.jsx'
 import IntroPage from './pages/index.jsx'
+import LoadingSpinner from './components/loadingSpinner.jsx'
 
 import { useAuthStore } from './store/authStore.js'
 import { useEffect } from 'react'
+
 
 
 const ProtectedRoute = ({ children }) => {
@@ -37,16 +39,14 @@ const RedirectAuthenticatedUser = ({ children }) => {
 }
 
 function App() {
-  const { isCheckingAuth, checkAuth, isAuthenticated, user } = useAuthStore()
-
-
-  console.log(isAuthenticated, user)
-  console.log(isCheckingAuth)
+  const { isCheckingAuth, checkAuth, } = useAuthStore()
 
   useEffect(() => {
     checkAuth()
   }
     , [checkAuth])
+  if (isCheckingAuth) return <LoadingSpinner />;
+
 
   return (
     <div className="min-h-screen">
