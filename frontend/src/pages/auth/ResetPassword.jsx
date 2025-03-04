@@ -17,7 +17,7 @@ function ResetPassword() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+            <div className="bg-white p-8 rounded-2xl shadow-lg w-96 w-[430px]">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Reset Password</h2>
                 <form className="space-y-4">
                     <InputField
@@ -26,6 +26,7 @@ function ResetPassword() {
                         name="password"
                         value={password}
                         onChange={handleInputChange}
+                        placeholder={"Enter your new password"}
                         icon={<Lock size={20} />}
                         toggleIcon={showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         onToggle={() => setShowPassword(!showPassword)}

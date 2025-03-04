@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import InputField from "../../components/auth/InputField";
+import PasswordStrengthMeter from "../../components/auth/PasswordStrengthMeter";
 
 function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -26,32 +27,55 @@ function SignUpPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+            <div className="bg-white p-8 rounded-2xl shadow-lg w-96 w-[430px]">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Account</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <InputField label="Email" type="email" name="email" value={formData.email} onChange={handleInputChange} icon={<Mail size={20} />} />
-                    <InputField label="Username" type="text" name="username" value={formData.username} onChange={handleInputChange} icon={<User size={20} />} />
+                    <InputField
+                        label="Email"
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        icon={<Mail size={20} />}
+                    />
+                    <InputField
+                        label="Username"
+                        type="text"
+                        name="username"
+                        placeholder="Choose a username"
+                        value={formData.username}
+                        onChange={handleInputChange}
+                        icon={<User size={20} />}
+                    />
                     <InputField
                         label="Password"
                         type={showPassword ? "text" : "password"}
                         name="password"
+                        placeholder="Enter your password"
                         value={formData.password}
                         onChange={handleInputChange}
                         icon={<Lock size={20} />}
                         toggleIcon={showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         onToggle={() => setShowPassword(!showPassword)}
                     />
+                    {/* Show PasswordStrengthMeter ONLY when password field has a value */}
+                    {formData.password && <PasswordStrengthMeter password={formData.password} />}
+
                     <InputField
                         label="Confirm Password"
                         type={showPasswordConfirm ? "text" : "password"}
                         name="confirmPassword"
+                        placeholder="Re-enter your password"
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         icon={<Lock size={20} />}
                         toggleIcon={showPasswordConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
                         onToggle={() => setShowPasswordConfirm(!showPasswordConfirm)}
                     />
-                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md cursor-pointer">Sign Up</button>
+                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md cursor-pointer">
+                        Sign Up
+                    </button>
                 </form>
                 <p className="text-center text-sm mt-3">
                     Already have an account? <Link to="/login" className="text-blue-600 hover:underline cursor-pointer">Login</Link>
@@ -60,4 +84,5 @@ function SignUpPage() {
         </div>
     );
 }
+
 export default SignUpPage;

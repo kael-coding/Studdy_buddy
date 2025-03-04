@@ -1,4 +1,4 @@
-const InputField = ({ label, type, name, value, onChange, icon, toggleIcon, onToggle }) => {
+const InputField = ({ label, type, name, value, onChange, placeholder, icon, toggleIcon, onToggle }) => {
     return (
         <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700 mb-2">{label}:</label>
@@ -9,6 +9,7 @@ const InputField = ({ label, type, name, value, onChange, icon, toggleIcon, onTo
                     name={name}
                     value={value}
                     onChange={onChange}
+                    placeholder={placeholder} // ✅ Added this line
                     className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {toggleIcon && (

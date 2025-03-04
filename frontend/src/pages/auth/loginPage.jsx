@@ -23,7 +23,7 @@ function LoginPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+            <div className="bg-white p-10 rounded-2xl shadow-lg w-[430px]">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <InputField
@@ -32,6 +32,7 @@ function LoginPage() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
+                        placeholder="Enter your email"
                         icon={<Mail size={20} />}
                     />
                     <InputField
@@ -40,6 +41,7 @@ function LoginPage() {
                         name="password"
                         value={formData.password}
                         onChange={handleInputChange}
+                        placeholder="Enter your password"
                         icon={<Lock size={20} />}
                         toggleIcon={showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         onToggle={() => setShowPassword(!showPassword)}
@@ -47,7 +49,9 @@ function LoginPage() {
                     <Link to="/forgot-password" className="block text-right text-sm text-blue-600 hover:underline cursor-pointer mt-3">
                         Forgot Password?
                     </Link>
-                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md mt-4 cursor-pointer">Login</button>
+                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md mt-4 cursor-pointer">
+                        Login
+                    </button>
                 </form>
                 <p className="text-center text-sm mt-3">
                     Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline cursor-pointer">Sign Up</Link>

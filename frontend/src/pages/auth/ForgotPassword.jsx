@@ -21,7 +21,7 @@ function ForgotPassword() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg w-[430px]">
                 <h2 className="text-2xl font-bold text-center mb-4">Forgot Password</h2>
                 <InputField
                     label="Email"
@@ -29,6 +29,7 @@ function ForgotPassword() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    placeholder="Enter your email"
                     icon={<Mail size={20} />}
                 />
                 <button className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition mt-4">
