@@ -40,7 +40,6 @@ export const signup = async (req, res) => {
         const user = new User({
             _id: customId,
             email,
-            fullName,
             userName,
             password: hashedPassword,
             verificationToken,

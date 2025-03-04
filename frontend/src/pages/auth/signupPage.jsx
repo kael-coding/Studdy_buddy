@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Loader } from "lucide-react";
+
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "react-hot-toast";
+
+
 import InputField from "../../components/auth/InputField";
 import PasswordStrengthMeter from "../../components/auth/PasswordStrengthMeter";
+
+
+const API_URL = "http://localhost:5000"
 
 function SignUpPage() {
     const [formData, setFormData] = useState({
         email: "",
-        username: "",
+        userName: "",
         password: "",
         confirmPassword: ""
     });
@@ -15,20 +24,57 @@ function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
+
+    const navigate = useNavigate();
+    const { mutate, error, isLoading } = useMutation({
+        mutationFn: async ({ email, userName, password }) => {
+            try {
+                const res = await fetch(`${API_URL}/api/auth/signup`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, userName, password }),
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || "Failed to create account");
+                console.log(data);
+                navigate("/verify-email", { state: { email: data.email } });
+                return data;
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        },
+        onSuccess: () => {
+            toast.success("Account created successfully");
+        },
+    });
+
+
+
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        const { email, userName, password, confirmPassword } = formData;
+        if (password !== confirmPassword) {
+            return setError("Passwords do not match");
+        }
+        mutate({ email, userName, password });
+
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-2xl shadow-lg w-96 w-[430px]">
+            <div className="bg-white p-8 rounded-2xl shadow-lg w-[430px]">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Create Account</h2>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <InputField
                         label="Email"
@@ -42,9 +88,9 @@ function SignUpPage() {
                     <InputField
                         label="Username"
                         type="text"
-                        name="username"
+                        name="userName"
                         placeholder="Choose a username"
-                        value={formData.username}
+                        value={formData.userName}
                         onChange={handleInputChange}
                         icon={<User size={20} />}
                     />
@@ -59,8 +105,8 @@ function SignUpPage() {
                         toggleIcon={showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         onToggle={() => setShowPassword(!showPassword)}
                     />
-                    {/* Show PasswordStrengthMeter ONLY when password field has a value */}
                     {formData.password && <PasswordStrengthMeter password={formData.password} />}
+
 
                     <InputField
                         label="Confirm Password"
@@ -73,8 +119,9 @@ function SignUpPage() {
                         toggleIcon={showPasswordConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
                         onToggle={() => setShowPasswordConfirm(!showPasswordConfirm)}
                     />
-                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md cursor-pointer">
-                        Sign Up
+                    {error && <p className="text-red-500 text-sm">{error.toString()}</p>}
+                    <button className="w-full bg-gray-600 text-white py-3 rounded-xl hover:bg-gray-700 transition shadow-md cursor-pointer" type="submit" disabled={isLoading}>
+                        {isLoading ? <Loader className="animate-spin mx-auto" size={24} /> : 'Sign Up'}
                     </button>
                 </form>
                 <p className="text-center text-sm mt-3">

@@ -17,7 +17,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/code" element={<VerificationCode />} />
+        <Route path="/verify-email" element={<VerificationCode />} />
 
 
       </Routes>
